@@ -70,7 +70,8 @@ private fun Header(parrot: Parrot) {
     val bitmap = LocalContext.current.assets.open(parrot.picture)
         .let { BitmapFactory.decodeStream(it) }
     val palette = Palette.Builder(bitmap).generate()
-    val cardBackgroundColor = Color(palette.vibrantSwatch?.rgb ?: 0x000000).copy(alpha = 0.12f)
+    val cardBackgroundColor = Color(palette.vibrantSwatch?.rgb ?: 0x000000)
+        .copy(alpha = 0.12f)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
