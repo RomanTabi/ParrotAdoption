@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         window.statusBarColor = white.toArgb()
         window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
         setContent {
             MyTheme {
@@ -230,7 +230,8 @@ fun ListParrots(parrots: List<Parrot>) {
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(1.dp), color = black.copy(alpha = 0.1f)
+                .height(1.dp),
+            color = black.copy(alpha = 0.1f)
         )
         LazyVerticalGrid(cells = GridCells.Fixed(cellCount)) {
             items(parrots) { parrot ->
@@ -259,7 +260,8 @@ fun ParrotItem(parrot: Parrot) {
                 .fillMaxHeight()
                 .clickable {
                     Navigator.navigateToDetail(parrot.id)
-                }) {
+                }
+        ) {
             Column(
                 modifier = Modifier
                     .background(cardBackgroundColor)
