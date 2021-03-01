@@ -22,33 +22,40 @@ import android.view.View
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.palette.graphics.Palette
 import com.example.androiddevchallenge.data.DataProvider
 import com.example.androiddevchallenge.data.entity.Parrot
 import com.example.androiddevchallenge.ui.HomeViewModel
+import com.example.androiddevchallenge.ui.ParrotDetail
+import com.example.androiddevchallenge.ui.navigation.Navigator
 import com.example.androiddevchallenge.ui.theme.MyTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.Alignment.Companion.Top
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
 import com.example.androiddevchallenge.ui.theme.black
 import com.example.androiddevchallenge.ui.theme.orange
 import com.example.androiddevchallenge.ui.theme.white
@@ -64,7 +71,13 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MyTheme {
-                MyApp()
+                val destination by rememberSaveable { Navigator.currentDestination }
+
+                when (destination) {
+                    is Navigator.Destination.Home -> Home()
+                    is Navigator.Destination.Detail ->
+                        ParrotDetail((destination as Navigator.Destination.Detail).parrotId)
+                }
             }
         }
     }
@@ -73,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 // Start building your app here!
 @ExperimentalFoundationApi
 @Composable
-fun MyApp() {
+fun Home() {
     Surface(color = MaterialTheme.colors.background) {
         Column {
             Header()
@@ -85,7 +98,6 @@ fun MyApp() {
         }
     }
 }
-
 
 @Composable
 fun Header() {
@@ -106,7 +118,7 @@ fun Header() {
                 }
                 Column {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {},
                         shape = MaterialTheme.shapes.medium
                     ) {
                         Text(
@@ -142,8 +154,8 @@ fun BreedFilter() {
             .padding(top = 8.dp)
             .fillMaxWidth()
     ) {
-        LazyRow() {
-            val breeds = listOf<String>("Cockatiel", "Macaw", "Kea", "Parakeet")
+        LazyRow {
+            val breeds = listOf("Cockatiel", "Macaw", "Kea", "Parakeet")
             items(breeds) { breed ->
                 Breed(breed = breed)
             }
@@ -180,11 +192,8 @@ fun Location() {
             style = MaterialTheme.typography.body1,
         )
         Row(verticalAlignment = CenterVertically) {
-            Image(
-                bitmap = AppCompatResources.getDrawable(
-                    LocalContext.current,
-                    R.drawable.ic_baseline_location_on_24
-                )!!.toBitmap().asImageBitmap(),
+            Icon(
+                imageVector = Icons.Outlined.LocationOn,
                 contentDescription = "",
                 modifier = Modifier
                     .size(12.dp),
@@ -207,7 +216,7 @@ fun ListParrots(parrots: List<Parrot>) {
     } else {
         2
     }
-    Column() {
+    Column {
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
@@ -239,7 +248,7 @@ fun ParrotItem(parrot: Parrot) {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .clickable {
-                    // TODO
+                    Navigator.navigateToDetail(parrot.id)
                 }) {
             Column(
                 modifier = Modifier
@@ -263,104 +272,16 @@ fun ParrotItem(parrot: Parrot) {
                     text = parrot.breed,
                     style = MaterialTheme.typography.h6,
                 )
-//                Row(
-////            modifier = Modifier.padding(top = 4.dp),
-//                    verticalAlignment = Top
-//                ) {
-                    Text(
-                        text = LocalContext.current.getString(parrot.sex.stringId),
-                        style = MaterialTheme.typography.subtitle2,
-                    )
-                    Text(
-                        text = parrot.latinName,
-                        style = MaterialTheme.typography.subtitle2,
-                    )
-//                }
+                Text(
+                    text = LocalContext.current.getString(parrot.sex.stringId),
+                    style = MaterialTheme.typography.subtitle2,
+                )
+                Text(
+                    text = parrot.latinName,
+                    style = MaterialTheme.typography.subtitle2,
+                )
             }
         }
-
-//    Surface(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .clickable {
-//// TODO: handle click
-//            },
-//    ) {
-//    Row() {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(start = 12.dp),
-//        ) {
-//            Card(
-//                backgroundColor = MaterialTheme.colors.surface,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(196.dp)
-//                    .padding(12.dp),
-//                shape = MaterialTheme.shapes.large,
-//            ) {
-//                val bitmap = LocalContext.current.assets.open(parrot.picture)
-//                    .let { BitmapFactory.decodeStream(it) }
-//                Image(
-//                    bitmap = bitmap.asImageBitmap(),
-//                    contentDescription = "",
-//                    contentScale = ContentScale.Crop,
-//                )
-//
-//                Text(
-//                    text = parrot.name,
-//                    style = MaterialTheme.typography.h6,
-//                )
-//                Row(
-//                    modifier = Modifier.padding(top = 4.dp),
-//                    verticalAlignment = CenterVertically
-//                ) {
-//                    Text(
-//                        text = LocalContext.current.getString(parrot.sex.stringId),
-//                        style = MaterialTheme.typography.subtitle2,
-//                    )
-////                    Image(
-////                        bitmap = AppCompatResources.getDrawable(
-////                            LocalContext.current,
-////                            R.drawable.ic_baseline_circle_24
-////                        )!!.toBitmap().asImageBitmap(),
-////                        contentDescription = "",
-////                        modifier = Modifier
-////                            .height(4.dp)
-////                            .width(16.dp),
-////                        colorFilter = ColorFilter.tint(orange, BlendMode.SrcIn),
-////                    )
-//
-//                    Text(
-//                        text = parrot.latinName,
-//                        style = MaterialTheme.typography.subtitle2,
-//                        modifier = Modifier
-//                            .padding(start = 4.dp)
-//                    )
-//                }
-//                Row(
-//                    modifier = Modifier.padding(top = 8.dp),
-//                    verticalAlignment = CenterVertically
-//                ) {
-//                    Image(
-//                        bitmap = AppCompatResources.getDrawable(
-//                            LocalContext.current,
-//                            R.drawable.ic_baseline_location_on_24
-//                        )!!.toBitmap().asImageBitmap(),
-//                        contentDescription = "",
-//                        modifier = Modifier.size(24.dp)
-//                    )
-//                    Text(
-//                        text = parrot.location,
-//                        style = MaterialTheme.typography.subtitle1,
-//                        modifier = Modifier
-//                            .padding(start = 12.dp),
-//                    )
-//                }
-//            }
-//        }
-//    }
     }
 }
 
@@ -384,11 +305,3 @@ fun LightPreview() {
         ListParrots(DataProvider.getData())
     }
 }
-//
-//@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-//@Composable
-//fun DarkPreview() {
-//    MyTheme(darkTheme = true) {
-//        MyApp()
-//    }
-//}

@@ -1,6 +1,9 @@
 package com.example.androiddevchallenge.data.entity
 
+import kotlinx.parcelize.Parcelize
+
 data class Parrot(
+    val id: Int,
     val name: String,
     val location: String,
     val temper: Temper,

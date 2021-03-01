@@ -8,6 +8,7 @@ object DataProvider {
 
     fun getData(): List<Parrot> = listOf(
         Parrot(
+            0,
             "Billy",
             "Brno CZ",
             Temper.Tame,
@@ -27,6 +28,7 @@ object DataProvider {
             1500f,
         ),
         Parrot(
+            1,
             "Lisa",
             "Zlin CZ",
             Temper.Wild,
@@ -46,6 +48,7 @@ object DataProvider {
             50f,
         ),
         Parrot(
+            2,
             "Lisa",
             "Zlin CZ",
             Temper.Wild,
@@ -65,6 +68,7 @@ object DataProvider {
             800f,
         ),
         Parrot(
+            3,
             "Lisa",
             "Zlin CZ",
             Temper.Wild,
@@ -84,6 +88,7 @@ object DataProvider {
             150f,
         ),
         Parrot(
+            4,
             "Lisa",
             "Zlin CZ",
             Temper.Wild,

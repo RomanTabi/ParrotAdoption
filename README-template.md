@@ -1,17 +1,21 @@
-# Put title of your app here
+# ParrotAdoption
 
 <!--- Replace <OWNER> with your Github Username and <REPOSITORY> with the name of your repository. -->
 <!--- You can find both of these in the url bar when you open your repository in github. -->
-![Workflow result](https://github.com/<OWNER>/<REPOSITORY>/workflows/Check/badge.svg)
+![Workflow result](https://github.com/RomanTabi/ParrotAdoption/workflows/Check/badge.svg)
 
 
 ## :scroll: Description
 <!--- Describe your app in one or two sentences -->
-
+Simple Parrot Adoption Android app with UI layer built with Jetpack Compose.
+The app displays static data and implements simple navigation.
 
 ## :bulb: Motivation and Context
 <!--- Optionally point readers to interesting parts of your submission. -->
 <!--- What are you especially proud of? -->
+Android Dev Challenge: lift off with Jetpack Compose
+Learning to build UI with Jetpack Compose.
+Most of the apps submitted on twitter were puppy adoption apps, this one is different and shows parrots!
 
 
 ## :camera_flash: Screenshots
